@@ -7,20 +7,19 @@
 # --- Setup UFW rules
 if [[ -f /usr/sbin/ufw ]]; then
     ufw limit 22/tcp
-    ufw allow 80/tcp  
-    ufw allow 443/tcp  
-    ufw default deny incoming  
+    ufw allow 80/tcp
+    ufw allow 443/tcp
+    ufw default deny incoming
     ufw default allow outgoing
     ufw enable
 else
-    echo "UFW not found"
+    echo "ufw not found"
 fi
 
 # --- Harden /etc/sysctl.conf
 if [[ -f /usr/sbin/sysctl ]]; then
-    sysctl kernel.modules_disabled=1
+#    sysctl kernel.modules_disabled=1
     sysctl -a
-    sysctl -A
     sysctl mib
     sysctl net.ipv4.conf.all.rp_filter
     sysctl -a --pattern 'net.ipv4.conf.(eth|wlan)0.arp'
