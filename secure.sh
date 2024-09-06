@@ -1,8 +1,13 @@
-#!/bin/sudo bash
+#!/usr/bin/env bash
 #-----------------------
 #--Required Packages-
 #-ufw
 #-fail2ban
+
+# get sudo
+if [ $UID -ne 0 ]; then
+    exec sudo "$0" "$@"
+fi
 
 # --- Setup UFW rules
 if [[ -f /usr/sbin/ufw ]]; then
@@ -18,11 +23,8 @@ fi
 
 # --- Harden /etc/sysctl.conf
 if [[ -f /usr/sbin/sysctl ]]; then
-#    sysctl kernel.modules_disabled=1
-    sysctl -a
-    sysctl mib
-    sysctl net.ipv4.conf.all.rp_filter
-    sysctl -a --pattern 'net.ipv4.conf.(eth|wlan)0.arp'
+    sysctl fs.protected_hardlinks=1
+    sysctl fs.protected_symlinks=1
 else
     echo "sysctl not found"
 fi
